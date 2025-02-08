@@ -19,7 +19,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>joop.kafka.stream.KafkaConsumerDBWikimedia</start-class>
         <log4jdbc.log4j2.version>1.16</log4jdbc.log4j2.version>
-
     </properties>
 
     <dependencies>
@@ -31,6 +30,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
         </dependency>
 
         <!-- PostgreSQL Driver -->

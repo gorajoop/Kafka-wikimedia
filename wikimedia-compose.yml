@@ -1,0 +1,79 @@
+volumes:
+  db-data:
+
+services:
+  kafka-wikimedia:
+    image: apache/kafka:latest
+    hostname: broker
+    container_name: kafka-wikimedia
+    ports:
+      - 9094:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL_DOCKER:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://broker:29092,EXTERNAL_DOCKER://${DOCKER_HOST_IP:-127.0.0.1}:9093
+      KAFKA_LISTENERS: INTERNAL://broker:29092,CONTROLLER://broker:29093,EXTERNAL_DOCKER://0.0.0.0:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker:29093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      CLUSTER_ID: x-0t_4w2R_edLQ5A_f9HHA
+
+  postgres-wikimedia:
+    image: postgres:14-alpine
+    container_name: postgres-wikimedia
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=wikimedia
+
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  producer:
+    build:
+      context: .
+      dockerfile: kafka-producer-wikimedia/Dockerfile
+    container_name: kafka-producer
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS=broker:29092
+    depends_on:
+      - kafka-wikimedia
+
+  consumer:
+    build:
+      context: .
+      dockerfile: kafka-consumer-postgres-wikimedia/Dockerfile
+    container_name: kafka-consumer
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS=broker:29092
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-wikimedia:5432/wikimedia
+    depends_on:
+      - kafka-wikimedia
+      - postgres-wikimedia
+
+  kafka-ui:
+    container_name: kafka-ui-wikimedia
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - kafka-wikimedia
+    ports:
+      - 5080:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:29092
+      DYNAMIC_CONFIG_ENABLED: true
+    volumes:
+      - ~/kui/config.yml:/etc/kafka-ui-wikimedia/dynamic_config.yaml

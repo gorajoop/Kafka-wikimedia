@@ -113,14 +113,14 @@ Once the Docker Compose setup is complete, the following services will be runnin
 
 - **Kafka**: Accessible at `localhost:9092`.
 - **PostgreSQL**: Accessible at `localhost:5432`.
-- **Kafka-UI**: Accessible at `http://localhost:8080` for monitoring Kafka.
+- **Kafka-UI**: Accessible at `http://localhost:5080` for monitoring Kafka.
 
 ---
 
 ## Verifying the Setup
 
 1. **Monitor Kafka Topic**:
-    - Open Kafka-UI at [http://localhost:8080](http://localhost:8080) to monitor the Kafka topic.
+    - Open Kafka-UI at [http://localhost:5080](http://localhost:5080) to monitor the Kafka topic.
 
 2. **Verify PostgreSQL Database**:
     - Check the PostgreSQL database to verify that events are being saved.
@@ -131,12 +131,12 @@ Once the Docker Compose setup is complete, the following services will be runnin
 
 - **Start the Project**:
   ```bash
-  docker-compose -f wikimedia-compose.yml up --build -d
+  docker compose -f wikimedia-compose.yml up --build -d
   ```
 
 - **Stop the Project**:
   ```bash
-  docker-compose -f wikimedia-compose.yml down
+  docker compose -f wikimedia-compose.yml down
   ```
 
 ---

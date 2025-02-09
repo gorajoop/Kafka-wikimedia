@@ -48,6 +48,18 @@ wikimedia
 
 ---
 
+### Built With
+
+- [![Springboot](https://img.shields.io/badge/Framework-Springboot-green?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot")
+
+- [![Kafka](https://img.shields.io/badge/Apache-Kafka-orange?logo=Apache-kafka&logoColor=white)](https://kafka.apache.org/")
+
+- [![PostGreSQL](https://img.shields.io/badge/Database-PostgreSQL-536a91?logo=postgresql&logoColor=white)](https://www.postgresql.org/")
+
+- [![Docker](https://img.shields.io/badge/Container-Docker-0955d9?logo=docker&logoColor=white)](https://www.docker.com/")
+
+---
+
 ## Prerequisites
 
 To run this project, you need the following installed on your machine:
@@ -171,6 +183,15 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - Apache Kafka for the event streaming platform.
 - Spring Boot for the backend framework.
 - Docker for containerization and orchestration.
+
+
+---
+
+## Contact
+
+Gora Joop - gorajoop@gmail.com
+
+Project Link: https://github.com/gorjoop/Kafka-wikimedia
 
 ---
 
